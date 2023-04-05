@@ -1,3 +1,34 @@
+import json
+
 import requests
 
-requests.get()
+class TestRequest:
+
+    #全局变量(类变量)，通过类名调用
+    access_token = ""
+
+    #get请求：获取接口统一鉴权码token接口
+    def test_get_token(self):
+        url = "https://api.weixin.qq.com/cgi-bin/token"
+        data = {
+            "grant_type":"client_credential",
+            "appid":"wx74a8627810cfa308",
+            "secret":"e40a02f9d79a8097df497e6aaf93ab80"
+        }
+        res = requests.get(url=url,params=data)
+        print(res.json())
+        TestRequest.access_token = res.json()['access_token']
+
+
+    # post请求：编辑标签接口
+    def test_edit_flag(self):
+        url = "https://api.weixin.qq.com/cgi-bin/tags/update?access_token="+TestRequest.access_token
+        data = {"tag":{"id":134,"name":"广东人"}}
+        # str_data = json.dumps(data)  #不用json传参，用data传参使用json.dumps()转换
+        res = requests.post(url=url,json=data)
+        print(res.json())
+
+
+if __name__ == '__main__':
+    TestRequest.test_get_token()
+    TestRequest.test_edit_flag()
