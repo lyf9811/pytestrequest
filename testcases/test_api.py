@@ -44,6 +44,9 @@ class TestRequest:
         res = requests.request("get", url=url)
         # print(res.text)
         # 正则提取
+        # \w+  表示匹配一个或多个字母、数字或下划线
+        # .*?  表示匹配任意字符
+        # \d+  表示匹配一个或多个数字
         obj = re.search('name="csrf_token" value="(.*?)"', res.text)
         # TestRequest.csrf_token = obj.group()
         # print(TestRequest.csrf_token)
