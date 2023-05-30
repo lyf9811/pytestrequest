@@ -7,7 +7,7 @@ import requests
 class TestRequest:
     # 全局变量(类变量)，通过类名调用
     access_token = ""
-    # csrf_token = ""
+    csrf_token = ""
 
     # get请求：获取接口统一鉴权码token接口
     def test_get_token(self):
@@ -42,11 +42,15 @@ class TestRequest:
     def test_start(self):
         url = "http://47.107.116.139/phpwind/"
         res = requests.request("get", url=url)
-        print(res.text)
+        # print(res.text)
         # 正则提取
-        obj = re.search('name ="csrf_token" value="(.*?)"', res.text)
-        TestRequest.csrf_token = obj.group(1)
-        print(TestRequest.csrf_token)
+        obj = re.search('name="csrf_token" value="(.*?)"', res.text)
+        # TestRequest.csrf_token = obj.group()
+        # print(TestRequest.csrf_token)
+        if obj:
+            print(obj.group()) # 输出匹配结果
+        else:
+            print("No match found.") # 匹配失败，输出提示
 
     # 登录接口
     def test_login(self):
@@ -54,11 +58,15 @@ class TestRequest:
         data = {
             " username ": "msxy",
             " password ": "msxy",
-            "csrf_token": "TestRequest.csrf_token",
+            "csrf_token": TestRequest.csrf_token,
             " backurl ": "http://47.107.116.139/phpwind/",
             " invite ": ""
         }
-        res = requests.request("post",url=url,data=data)
+        headers ={
+            "Accept":"application/json,text/javascript,/; q=0.01",
+            "X-Requested-With":"XMLHttpRequest"
+        }
+        res = requests.request("post",url=url,data=data,headers=headers)
         print(res.json())
 
 
@@ -66,5 +74,5 @@ if __name__ == '__main__':
     TestRequest.test_get_token()
     TestRequest.test_edit_flag()
     TestRequest.test_file_upload()
-    # TestRequest.test_start()
-    # TestRequest.test_login()
+    TestRequest.test_start()
+    TestRequest.test_login()
