@@ -8,6 +8,8 @@ class TestRequest:
     # 全局变量(类变量)，通过类名调用
     access_token = ""
     csrf_token = ""
+    php_cookie = ""
+    sess = requests.session()
 
     # get请求：获取接口统一鉴权码token接口
     def test_get_token(self):
@@ -41,7 +43,7 @@ class TestRequest:
     # 访问首页接口
     def test_start(self):
         url = "http://47.107.116.139/phpwind/"
-        res = requests.request("get", url=url)
+        res = TestRequest.sess.request("get", url=url)
         # print(res.text)
         # 正则提取
         # \w+  表示匹配一个或多个字母、数字或下划线
@@ -53,7 +55,9 @@ class TestRequest:
         if obj:
             print(obj.group()) # 输出匹配结果
         else:
-            print("No match found.") # 匹配失败，输出提示
+            print("No match found") # 匹配失败，输出提示
+        #提取cookie
+        # TestRequest.php_cookie = res.cookies
 
     # 登录接口
     def test_login(self):
@@ -66,11 +70,13 @@ class TestRequest:
             " invite ": ""
         }
         headers ={
-            "Accept":"application/json,text/javascript,/; q=0.01",
-            "X-Requested-With":"XMLHttpRequest"
+            "Accept":"application/json, text/javascript, /; q=0.01",
+            "X-Requested-With": "XMLHttpRequest"
         }
-        res = requests.request("post",url=url,data=data,headers=headers)
+        res = TestRequest.sess.request("post",url=url,data=data,headers=headers)
         print(res.json())
+
+
 
 
 if __name__ == '__main__':
