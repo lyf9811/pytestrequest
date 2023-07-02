@@ -1,6 +1,5 @@
 import json
 import re
-
 import requests
 
 
@@ -30,6 +29,7 @@ class TestRequest:
         # str_data = json.dumps(data)  #不用json传参，用data传参使用json.dumps()转换
         res = requests.request("post", url=url, json=data)
         print(res.json())
+        # raise Exception("百里老师翻车了")  故意加的报错
 
     # 文件上传
     def test_file_upload(self):
@@ -50,8 +50,8 @@ class TestRequest:
         # .*?  表示匹配任意字符
         # \d+  表示匹配一个或多个数字
         obj = re.search('name="csrf_token" value="(.*?)"', res.text)
-        # TestRequest.csrf_token = obj.group()
-        # print(TestRequest.csrf_token)
+        TestRequest.csrf_token = obj.group(1)
+        print(res.text)
         if obj:
             print(obj.group()) # 输出匹配结果
         else:
@@ -63,11 +63,11 @@ class TestRequest:
     def test_login(self):
         url = "http://47.107.116.139/phpwind/index.php?m=u&c=login&a=dorun"
         data = {
-            " username ": "msxy",
-            " password ": "msxy",
+            "username": "msxy",
+            "password": "msxy",
             "csrf_token": TestRequest.csrf_token,
-            " backurl ": "http://47.107.116.139/phpwind/",
-            " invite ": ""
+            "backurl": "http://47.107.116.139/phpwind/",
+            "invite": ""
         }
         headers ={
             "Accept":"application/json, text/javascript, /; q=0.01",
@@ -79,9 +79,9 @@ class TestRequest:
 
 
 
-if __name__ == '__main__':
-    TestRequest.test_get_token()
-    TestRequest.test_edit_flag()
-    TestRequest.test_file_upload()
-    TestRequest.test_start()
-    TestRequest.test_login()
+# if __name__ == '__main__':
+#     TestRequest.test_get_token()
+#     TestRequest.test_edit_flag()
+#     TestRequest.test_file_upload()
+#     TestRequest.test_start()
+#     TestRequest.test_login()

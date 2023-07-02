@@ -2,7 +2,6 @@ import re
 import requests
 
 
-# class Testrequest:
 
 # 拼图的newcoming接口
 def test_gv_newcoming():
@@ -15,6 +14,7 @@ def test_gv_newcoming():
         # res = requests.get(url,params=data,headers=headers)
         res = requests.request("get", url=url, params=data)
         print(res.json())
+
 
 
     # gv的统一接口
