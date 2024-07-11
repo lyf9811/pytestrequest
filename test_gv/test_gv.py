@@ -1,6 +1,8 @@
 import json
 import re
 import requests
+import websockets
+import asyncio
 
 
 
@@ -57,14 +59,21 @@ def test_gv():
         print(res.json())
 
 
+async def test_team():
+    # ws =  websockets.connect("wss://ws.dev.smartcoder.top/game/login/checkin")
+    uri = "wss://ws.dev.smartcoder.top/game/login/checkin"
+    async with websockets.connect(uri) as websocket:
+        await websocket.send("hello")
+        response = await websocket.recv()
+        print(f'Received:{response}')
 
-def test_team():
-    url = "https://commonapi.dev.smartcoder.top/game/login/checkin"
-    data = {
-        "muid": "cda2f41a-6ba0-4006-8d02-50da84151379"
-    }
-    res = requests.get(url=url,params=data)
-    print(res.json())
+asyncio.get_event_loop().run_until_complete(test_team())
+
+    # data = {
+    #     "muid": "cda2f41a-6ba0-4006-8d02-50da84151379"
+    # }
+    # res = requests.get(url=url,params=data)
+    # print(res.json())
 
 
 if __name__ == '__main__':
